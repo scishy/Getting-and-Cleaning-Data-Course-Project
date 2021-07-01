@@ -6,7 +6,6 @@
 
 library(data.table)
 library(dplyr)
-library(stringr)
 
 #2. Download and unzip files
 
