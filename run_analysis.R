@@ -4,7 +4,7 @@
 
 #1. Load necessary packages
 
-library(data.table)
+library(janitor)
 library(dplyr)
 
 #2. Download and unzip files
@@ -67,8 +67,7 @@ test_and_train_mean_std_labeled <- merge(mean_std, activity_labels, by = "activi
 
 #reorder columns
 test_and_train_DT <- test_and_train_mean_std_labeled[c(2, 1, 89, 3:88)]%>%
-  arrange(subject_id) %>% #update to arrange by subject_id
-  data.table()
+  arrange(subject_id) #update to arrange by subject_id
 
 #View(test_and_train_DT)
 
@@ -77,10 +76,10 @@ test_and_train_DT <- test_and_train_mean_std_labeled[c(2, 1, 89, 3:88)]%>%
 #select applicable rows and calculate means
 mean_activity_DT <- test_and_train_DT %>%  
   select(-contains(c("std", "activity_id"))) %>% 
-  group_by(subject_id, activity) %>% summarize_all(funs(mean))
+  group_by(subject_id, activity) %>% summarize_all(funs(mean)) %>%
+  clean_names() #remove parentheses from column names
 
-#remove parentheses from column names
-names(mean_activity_DT) <- sub("\\(|\\)", "", names(mean_activity_DT))
+
 View(mean_activity_DT)
 
 #7. Export final product to text file
